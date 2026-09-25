@@ -1,5 +1,7 @@
 # Feature Request — At-Risk Orders Queue
 
+> Refined specs (source of truth): [at-risk-orders-functional-spec.md](at-risk-orders-functional-spec.md), [at-risk-orders-technical-spec.md](at-risk-orders-technical-spec.md).
+
 The Operations team wants a small queue that helps them identify orders that need attention during a busy service period.
 
 ## User
