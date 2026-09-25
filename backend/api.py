@@ -3,6 +3,7 @@ from pathlib import Path
 from flask import Flask, jsonify, send_from_directory
 
 from backend.services.orders import get_order, load_orders
+from backend.services.risk import is_at_risk
 
 
 def create_app() -> Flask:
@@ -12,6 +13,13 @@ def create_app() -> Flask:
     @app.get("/api/orders")
     def list_orders():
         return jsonify(load_orders())
+
+    @app.get("/api/orders/at-risk")
+    def at_risk_orders():
+        orders = load_orders()
+        risky = [o for o in orders if is_at_risk(o)]
+        risky.sort(key=lambda o: o.get("estimated_delay_minutes", 0), reverse=True)
+        return jsonify(risky)
 
     @app.get("/api/orders/<order_id>")
     def order_detail(order_id: str):
