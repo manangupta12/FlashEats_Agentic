@@ -8,8 +8,10 @@ body { margin: 0; }
 .container { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
 .eyebrow { font-size: 12px; letter-spacing: 0.12em; font-weight: 700; }
 h1 { margin-bottom: 4px; }
+h2 { margin: 0 0 4px; font-size: 1.25rem; }
 .subtle, .message { color: #66737f; }
-.message { margin: 28px 0 12px; }
+.message { margin: 16px 0 12px; }
+.queue-section { margin-top: 36px; }
 .orders { display: grid; gap: 10px; }
 .order-card {
   width: 100%;
