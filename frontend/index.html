@@ -3,21 +3,114 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FlashEats Operations</title>
+  <title>FlashEats Operations — At-Risk Orders Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <main class="container">
-    <header>
-      <p class="eyebrow">FLASHEATS OPERATIONS</p>
-      <h1>Active Orders</h1>
-      <p class="subtle">Current internal order view</p>
-    </header>
+  <div class="app-layout">
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+      <div class="brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-name">FlashEats <span class="brand-sub">Operations & Support</span></span>
+      </div>
+      <div class="nav-actions">
+        <span class="status-indicator">
+          <span class="pulse-dot"></span>
+          Live Monitoring
+        </span>
+        <button id="refresh-btn" class="btn btn-secondary" title="Refresh orders">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          Refresh
+        </button>
+      </div>
+    </nav>
 
-    <div id="message" class="message">Loading orders…</div>
-    <div id="orders" class="orders"></div>
-  </main>
+    <!-- Main Content Area -->
+    <main class="main-container">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">PRIORITY INTERVENTION QUEUE</p>
+          <h1>At-Risk Orders</h1>
+          <p class="subtitle">Active deliveries experiencing severe delays (&ge;10 min) requiring immediate support intervention.</p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-card" id="risk-counter-card">
+            <span class="stat-label">Orders Requiring Action</span>
+            <span class="stat-value" id="risk-count">-</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Loading State -->
+      <div id="loading-state" class="state-container">
+        <div class="spinner"></div>
+        <p>Loading at-risk orders…</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="error-state" class="state-container hidden">
+        <div class="error-banner">
+          <div class="error-icon">⚠️</div>
+          <div class="error-text">
+            <strong>Failed to load orders</strong>
+            <p id="error-message">An error occurred while fetching orders.</p>
+          </div>
+          <button id="retry-btn" class="btn btn-primary">Retry</button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="state-container hidden">
+        <div class="empty-card">
+          <div class="empty-icon">✅</div>
+          <h3>All Active Deliveries On Track</h3>
+          <p>There are currently no active orders exceeding the 10-minute delay threshold.</p>
+        </div>
+      </div>
+
+      <!-- Table View -->
+      <div id="table-container" class="table-card hidden">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Promised / Projected ETA</th>
+              <th>Estimated Delay</th>
+              <th>Fulfillment Status</th>
+              <th>Action / Support</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Order Detail Drawer Backdrop -->
+  <div id="drawer-backdrop" class="drawer-backdrop hidden"></div>
+
+  <!-- Order Detail Slide-Over Drawer -->
+  <aside id="order-drawer" class="order-drawer hidden" aria-labelledby="drawer-title" role="dialog">
+    <div class="drawer-header">
+      <div>
+        <span class="drawer-eyebrow">ORDER INSPECTION</span>
+        <h2 id="drawer-title">Order Details</h2>
+      </div>
+      <button id="drawer-close-btn" class="drawer-close" aria-label="Close details">&times;</button>
+    </div>
+
+    <div id="drawer-body" class="drawer-body">
+      <!-- Populated dynamically -->
+    </div>
+  </aside>
 
   <script src="/app.js"></script>
 </body>
 </html>
+
