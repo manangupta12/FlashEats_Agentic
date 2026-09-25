@@ -11,7 +11,7 @@ h1 { margin-bottom: 4px; }
 .subtle, .message { color: #66737f; }
 .message { margin: 28px 0 12px; }
 .orders { display: grid; gap: 10px; }
-.order-card {
+.at-risk-card {
   width: 100%;
   border: 1px solid #d9dee3;
   background: white;
@@ -22,5 +22,16 @@ h1 { margin-bottom: 4px; }
   text-align: left;
   cursor: pointer;
 }
-.order-card div { display: flex; gap: 18px; align-items: center; }
-.order-card span { color: #66737f; }
+.at-risk-card span { color: #66737f; }
+.at-risk-card:hover, .at-risk-card:focus-visible { border-color: #e06b35; outline-color: #e06b35; }
+.detail { position: relative; margin-top: 24px; padding: 20px; border: 1px solid #d9dee3; border-radius: 8px; background: white; }
+.detail h2 { margin: 0 100px 16px 0; }
+.detail-close { position: absolute; top: 18px; right: 18px; }
+.detail dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; margin: 0; }
+.detail dl div { min-width: 0; }
+.detail dt { color: #66737f; font-size: 13px; }
+.detail dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .container { padding: 28px 16px; }
+  .detail dl { grid-template-columns: 1fr; }
+}

@@ -10,12 +10,13 @@
   <main class="container">
     <header>
       <p class="eyebrow">FLASHEATS OPERATIONS</p>
-      <h1>Active Orders</h1>
-      <p class="subtle">Current internal order view</p>
+      <h1>At-Risk Orders</h1>
+      <p class="subtle">Active orders with an estimated delay of 10 minutes or more</p>
     </header>
 
     <div id="message" class="message">Loading orders…</div>
     <div id="orders" class="orders"></div>
+    <section id="order-detail" class="detail" aria-live="polite" hidden></section>
   </main>
 
   <script src="/app.js"></script>

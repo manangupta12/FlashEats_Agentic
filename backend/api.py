@@ -2,7 +2,7 @@ from pathlib import Path
 
 from flask import Flask, jsonify, send_from_directory
 
-from backend.services.orders import get_order, load_orders
+from backend.services.orders import get_at_risk_orders, get_order, load_orders
 
 
 def create_app() -> Flask:
@@ -12,6 +12,10 @@ def create_app() -> Flask:
     @app.get("/api/orders")
     def list_orders():
         return jsonify(load_orders())
+
+    @app.get("/api/orders/at-risk")
+    def at_risk_orders():
+        return jsonify(get_at_risk_orders())
 
     @app.get("/api/orders/<order_id>")
     def order_detail(order_id: str):
