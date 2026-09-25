@@ -24,7 +24,14 @@ def test_completed_late_order_is_not_actionable_risk():
     ) is False
 
 
+def test_cancelled_order_is_not_actionable_risk():
+    assert is_at_risk(
+        make_order(status="CANCELLED", estimated_delay_minutes=21)
+    ) is False
+
+
 def test_unknown_delay_is_not_classified_as_risk():
     assert is_at_risk(
         make_order(estimated_delay_minutes=None)
     ) is False
+
