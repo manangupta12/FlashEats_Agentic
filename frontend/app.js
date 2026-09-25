@@ -1,3 +1,5 @@
+const atRiskEl = document.getElementById("at-risk-orders");
+const atRiskMessageEl = document.getElementById("at-risk-message");
 const ordersEl = document.getElementById("orders");
 const messageEl = document.getElementById("message");
 const detailEl = document.getElementById("detail");
@@ -65,19 +67,22 @@ async function showOrderDetail(orderId) {
   }
 }
 
-function renderOrders(orders) {
+function bindOrderCards(container) {
+  container.querySelectorAll(".order-card").forEach((button) => {
+    button.addEventListener("click", () => showOrderDetail(button.dataset.orderId));
+  });
+}
+
+function renderList(container, listMessageEl, orders, emptyText, countText) {
   if (orders.length === 0) {
-    messageEl.textContent = "No active orders currently need attention.";
-    ordersEl.innerHTML = "";
+    listMessageEl.textContent = emptyText;
+    container.innerHTML = "";
     return;
   }
 
-  messageEl.textContent = `${orders.length} order${orders.length === 1 ? "" : "s"} need attention`;
-  ordersEl.innerHTML = orders.map(orderCard).join("");
-
-  document.querySelectorAll(".order-card").forEach((button) => {
-    button.addEventListener("click", () => showOrderDetail(button.dataset.orderId));
-  });
+  listMessageEl.textContent = countText(orders.length);
+  container.innerHTML = orders.map(orderCard).join("");
+  bindOrderCards(container);
 }
 
 async function loadAtRiskOrders() {
@@ -85,11 +90,36 @@ async function loadAtRiskOrders() {
     const response = await fetch("/api/orders/at-risk");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    renderOrders(await response.json());
+    renderList(
+      atRiskEl,
+      atRiskMessageEl,
+      await response.json(),
+      "No at-risk orders right now.",
+      (count) => `${count} order${count === 1 ? "" : "s"} need attention`
+    );
   } catch (error) {
-    messageEl.textContent = `Could not load at-risk orders: ${error.message}`;
+    atRiskMessageEl.textContent = `Could not load at-risk orders: ${error.message}`;
+    atRiskEl.innerHTML = "";
+  }
+}
+
+async function loadOrders() {
+  try {
+    const response = await fetch("/api/orders");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    renderList(
+      ordersEl,
+      messageEl,
+      await response.json(),
+      "No orders found.",
+      (count) => `${count} orders loaded`
+    );
+  } catch (error) {
+    messageEl.textContent = `Could not load orders: ${error.message}`;
     ordersEl.innerHTML = "";
   }
 }
 
 loadAtRiskOrders();
+loadOrders();
