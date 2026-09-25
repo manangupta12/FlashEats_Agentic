@@ -12,10 +12,24 @@
       <p class="eyebrow">FLASHEATS OPERATIONS</p>
       <h1>Active Orders</h1>
       <p class="subtle">Current internal order view</p>
+      
+      <label class="toggle-wrapper" for="risk-toggle">
+        <input type="checkbox" id="risk-toggle" />
+        <div class="toggle-switch"></div>
+        <strong>Show At-Risk Orders Only</strong>
+      </label>
     </header>
 
     <div id="message" class="message">Loading orders…</div>
     <div id="orders" class="orders"></div>
+
+    <!-- Modal for Order Details -->
+    <div id="order-modal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
   </main>
 
   <script src="/app.js"></script>
