@@ -10,14 +10,29 @@
   <main class="container">
     <header>
       <p class="eyebrow">FLASHEATS OPERATIONS</p>
-      <h1>Active Orders</h1>
-      <p class="subtle">Current internal order view</p>
+      <h1>Operations Console</h1>
+      <p class="subtle">Monitor active deliveries & at-risk order interventions</p>
     </header>
 
-    <div id="message" class="message">Loading orders…</div>
-    <div id="orders" class="orders"></div>
+    <section class="queue-section">
+      <div class="section-header">
+        <h2>At-Risk Orders Queue</h2>
+        <span id="at-risk-badge" class="badge risk-badge">0</span>
+      </div>
+      <div id="at-risk-message" class="message">Loading at-risk queue…</div>
+      <div id="at-risk-orders" class="orders"></div>
+    </section>
+
+    <section class="queue-section">
+      <div class="section-header">
+        <h2>All Active Orders</h2>
+      </div>
+      <div id="message" class="message">Loading orders…</div>
+      <div id="orders" class="orders"></div>
+    </section>
   </main>
 
   <script src="/app.js"></script>
 </body>
 </html>
+
