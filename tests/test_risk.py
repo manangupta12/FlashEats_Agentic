@@ -1,3 +1,5 @@
+import pytest
+
 from backend.services.risk import is_at_risk
 
 
@@ -10,21 +12,18 @@ def make_order(**overrides):
     return order
 
 
-def test_active_order_at_threshold_is_at_risk():
-    assert is_at_risk(make_order(estimated_delay_minutes=10)) is True
+@pytest.mark.parametrize("delay", [10, 11, 30])
+def test_active_orders_at_or_above_threshold_are_at_risk(delay):
+    assert is_at_risk(make_order(estimated_delay_minutes=delay)) is True
 
 
-def test_active_order_below_threshold_is_not_at_risk():
-    assert is_at_risk(make_order(estimated_delay_minutes=9)) is False
+@pytest.mark.parametrize("delay", [-5, 0, 9, None])
+def test_active_orders_below_threshold_or_missing_delay_are_not_at_risk(delay):
+    assert is_at_risk(make_order(estimated_delay_minutes=delay)) is False
 
 
-def test_completed_late_order_is_not_actionable_risk():
+@pytest.mark.parametrize("status", ["DELIVERED", "CANCELLED", "PREPARING"])
+def test_non_active_orders_are_not_at_risk_even_with_large_delay(status):
     assert is_at_risk(
-        make_order(status="DELIVERED", estimated_delay_minutes=25)
-    ) is False
-
-
-def test_unknown_delay_is_not_classified_as_risk():
-    assert is_at_risk(
-        make_order(estimated_delay_minutes=None)
+        make_order(status=status, estimated_delay_minutes=25)
     ) is False

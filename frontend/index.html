@@ -14,8 +14,19 @@
       <p class="subtle">Current internal order view</p>
     </header>
 
-    <div id="message" class="message">Loading orders…</div>
-    <div id="orders" class="orders"></div>
+    <section>
+      <h2>At-Risk Queue</h2>
+      <div id="at-risk-message" class="message" role="status">Loading at-risk orders...</div>
+      <div id="at-risk-orders" class="orders"></div>
+    </section>
+
+    <section>
+      <h2>All Orders</h2>
+      <div id="message" class="message" role="status">Loading orders...</div>
+      <div id="orders" class="orders"></div>
+    </section>
+
+    <section id="detail" class="detail" aria-live="polite" hidden></section>
   </main>
 
   <script src="/app.js"></script>
