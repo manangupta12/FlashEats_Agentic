@@ -18,3 +18,13 @@ def test_existing_api_does_not_expose_risk_score_field(client):
     payload = response.get_json()
     assert "risk_score" not in payload
     assert "estimated_delay_minutes" in payload
+
+
+def test_at_risk_endpoint_returns_qualifying_orders_sorted(client):
+    response = client.get("/api/orders/at-risk")
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert [o["order_id"] for o in payload] == [
+        "FE-48291", "FE-48293", "FE-48297",
+    ]
+    assert all(o["status"] == "ACTIVE" for o in payload)

@@ -14,3 +14,11 @@ def is_at_risk(order: dict) -> bool:
         and delay is not None
         and delay >= 10
     )
+
+
+def at_risk_orders(orders: list[dict]) -> list[dict]:
+    """Qualifying orders, most delayed first; order_id breaks ties."""
+    return sorted(
+        (order for order in orders if is_at_risk(order)),
+        key=lambda order: (-order["estimated_delay_minutes"], order["order_id"]),
+    )
