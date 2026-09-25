@@ -24,3 +24,7 @@ h1 { margin-bottom: 4px; }
 }
 .order-card div { display: flex; gap: 18px; align-items: center; }
 .order-card span { color: #66737f; }
+h2 { font-size: 18px; margin: 32px 0 0; }
+.message.error { color: #b42318; font-weight: 600; }
+.queue-card { flex-direction: column; gap: 8px; border-left: 4px solid #d97706; }
+.queue-card .delay { color: #b45309; font-weight: 600; }

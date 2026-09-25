@@ -39,4 +39,65 @@ async function loadOrders() {
   }
 }
 
+const queueEl = document.getElementById("queue");
+const queueMessageEl = document.getElementById("queue-message");
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function queueCard(order) {
+  const currentEta = order.current_eta ?? "Unknown";
+  const support = order.support_opened ? "Support ticket open" : "No support ticket";
+  const intervention = order.previous_intervention ?? "None";
+
+  return `
+    <button class="order-card queue-card" data-order-id="${escapeHtml(order.order_id)}">
+      <div>
+        <strong>${escapeHtml(order.order_id)}</strong>
+        <span class="delay">${escapeHtml(order.estimated_delay_minutes)} min late</span>
+      </div>
+      <div>
+        <span>Promised ${escapeHtml(order.promised_eta)}</span>
+        <span>Now ${escapeHtml(currentEta)}</span>
+      </div>
+      <div>
+        <span>Restaurant: ${escapeHtml(order.restaurant_status)}</span>
+        <span>Driver: ${escapeHtml(order.driver_status)}</span>
+      </div>
+      <div>
+        <span>${support}</span>
+        <span>Previous intervention: ${escapeHtml(intervention)}</span>
+      </div>
+    </button>
+  `;
+}
+
+async function loadQueue() {
+  try {
+    const response = await fetch("/api/at-risk-orders");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const orders = await response.json();
+    if (orders.length === 0) {
+      queueMessageEl.textContent = "No active orders are delayed 10+ minutes right now.";
+      queueEl.innerHTML = "";
+      return;
+    }
+
+    const noun = orders.length === 1 ? "order" : "orders";
+    queueMessageEl.textContent = `${orders.length} active ${noun} delayed 10+ minutes, most delayed first`;
+    queueEl.innerHTML = orders.map(queueCard).join("");
+  } catch (error) {
+    queueMessageEl.classList.add("error");
+    queueMessageEl.textContent = `Could not load at-risk orders: ${error.message}`;
+  }
+}
+
+loadQueue();
 loadOrders();
