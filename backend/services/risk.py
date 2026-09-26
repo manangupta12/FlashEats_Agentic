@@ -14,3 +14,15 @@ def is_at_risk(order: dict) -> bool:
         and delay is not None
         and delay >= 10
     )
+
+
+def at_risk_queue(orders: list[dict]) -> list[dict]:
+    """Return the orders that need intervention now, most urgent first.
+
+    Membership is decided only by is_at_risk(). Orders are sorted by
+    estimated delay, largest first, with ties broken by order_id.
+    """
+    return sorted(
+        (order for order in orders if is_at_risk(order)),
+        key=lambda order: (-order["estimated_delay_minutes"], order["order_id"]),
+    )
