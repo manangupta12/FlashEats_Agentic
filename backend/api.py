@@ -3,6 +3,7 @@ from pathlib import Path
 from flask import Flask, jsonify, send_from_directory
 
 from backend.services.orders import get_order, load_orders
+from backend.services.risk import at_risk_queue
 
 
 def create_app() -> Flask:
@@ -19,6 +20,10 @@ def create_app() -> Flask:
         if order is None:
             return jsonify({"error": "order_not_found"}), 404
         return jsonify(order)
+
+    @app.get("/api/at-risk-orders")
+    def at_risk_orders():
+        return jsonify(at_risk_queue(load_orders()))
 
     @app.get("/")
     def index():
